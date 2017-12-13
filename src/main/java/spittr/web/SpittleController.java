@@ -17,28 +17,38 @@ import spittr.data.SpittleRepository;
 @Controller
 @RequestMapping("/spittles")
 public class SpittleController {
-
+  /*
+   * 【1】 声明静态字符串常量 MAX_LONG_AS_STRING
+   */
   private static final String MAX_LONG_AS_STRING = "9223372036854775807";
-  
+  /*
+   * 【2】 声明DAO层（data）属性 sr
+   */
   private SpittleRepository spittleRepository;
-
+  /*
+   * 【3】 声明sc的构造器（必须通过注入sr对象才能初始化sc）
+   */
   @Autowired
   public SpittleController(SpittleRepository spittleRepository) {
     this.spittleRepository = spittleRepository;
   }
-
+  /*
+   * 【4】  因为@RequestParam,所以max , count 是查询字符串 
+   */
   @RequestMapping(method=RequestMethod.GET)
   public List<Spittle> spittles(
       @RequestParam(value="max", defaultValue=MAX_LONG_AS_STRING) long max,
       @RequestParam(value="count", defaultValue="20") int count) {
-    return spittleRepository.findSpittles(max, count);
+    return spittleRepository.findSpittles(max, count); 
   }
-
+  /*
+   * 【5】Model极为常用，该对象往返于视图
+   */
   @RequestMapping(value="/{spittleId}", method=RequestMethod.GET)
   public String spittle(
       @PathVariable("spittleId") long spittleId, 
       Model model) {
-    model.addAttribute(spittleRepository.findOne(spittleId));
+    model.addAttribute(spittleRepository.findOne(spittleId));//隐式声明Key
     return "spittle";
   }
 

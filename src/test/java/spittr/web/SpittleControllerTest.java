@@ -40,31 +40,31 @@ public class SpittleControllerTest {
   @Test
   public void houldShowRecentSpittles() throws Exception {
     /*
-     *  .createSpittleList(int) 作用：创建int个Spittle对象
+     * 【1】 .createSpittleList(int) 作用：创建int个Spittle对象
      */
 	List<Spittle> expectedSpittles = createSpittleList(20); 
 	/*
-	 *  .mock(Class) 作用:创建类的模拟器。
-	 *   创建SpittleRepository模拟器
+	 * 【2】.mock(Class) 作用:利用模拟器创建SpittleRepository对象。
 	 */
     SpittleRepository mockRepository = mock(SpittleRepository.class); 
     /*
-     * 
+     * 【3】
      */
     when(mockRepository.findSpittles(Long.MAX_VALUE, 20))
         .thenReturn(expectedSpittles);
     /*
+     * 【4】 传入【2】中的参数并创建一个SpittleController控制器
      * 
      */
     SpittleController controller = new SpittleController(mockRepository);
     /*
-     *  .setSingleView(...) 作用：mockMvc不需要再解析控制器中的视图名
+     * 【5】 传入【4】中的参数并创建SpittleController控制器的模拟器
      */
-    MockMvc mockMvc = standaloneSetup(controller)
+    MockMvc mockMvc = standaloneSetup(controller)//
         .setSingleView(new InternalResourceView("/WEB-INF/views/spittles.jsp"))
         .build();
     /*
-     * 发送 /spittles 请求，呈现 spittles.jsp 页面并且页面包含 spittleList 属性，属性内包含预期的内容。
+     * 【6】 发送 /spittles 请求，呈现 spittles.jsp 页面并且页面包含 spittleList 属性，属性内包含预期的内容。
      */
     mockMvc.perform(get("/spittles"))
        .andExpect(view().name("spittles"))

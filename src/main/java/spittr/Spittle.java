@@ -77,5 +77,12 @@ public class Spittle {
   public int hashCode() {
     return HashCodeBuilder.reflectionHashCode(this, "id", "time");
   }
+
+@Override
+public String toString() {
+	return "Spittle [id=" + id + ", message=" + message + ", time=" + time + ", latitude=" + latitude + ", longitude="
+			+ longitude + "]";
+}
+  
   
 }
