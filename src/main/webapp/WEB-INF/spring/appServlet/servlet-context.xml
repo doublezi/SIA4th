@@ -11,15 +11,24 @@
     http://www.springframework.org/schema/context/spring-context.xsd">
 
   <annotation-driven />
-
+  
+  <!-- 
+  		控制器（Controller）扫描器
+   -->
   <context:component-scan base-package="spitter" />
-
+  
+  <!-- 
+  		视图解析器
+   -->
   <beans:bean
     class="org.springframework.web.servlet.view.InternalResourceViewResolver">
     <beans:property name="prefix" value="/WEB-INF/views/" />
     <beans:property name="suffix" value=".jsp" />
   </beans:bean>
-
+  
+  <!-- 
+  		静态资源映射器
+   -->
   <resources mapping="/resources/**" location="/resources/" />
 
   <!-- 

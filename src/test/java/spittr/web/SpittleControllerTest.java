@@ -53,12 +53,12 @@ public class SpittleControllerTest {
     when(mockRepository.findSpittles(Long.MAX_VALUE, 20))
         .thenReturn(expectedSpittles);
     /*
-     * 【4】 传入【2】中的参数并创建一个SpittleController控制器
+     * 【4】 传入{【2】}中的参数并创建一个SpittleController控制器
      * 
      */
     SpittleController controller = new SpittleController(mockRepository);
     /*
-     * 【5】 传入【4】中的参数并创建SpittleController控制器的模拟器
+     * 【5】 传入{【4】}的参数并创建控制器的模拟器，该模拟器用于单元测试
      */
     MockMvc mockMvc = standaloneSetup(controller)//
         .setSingleView(new InternalResourceView("/WEB-INF/views/spittles.jsp"))
@@ -75,16 +75,32 @@ public class SpittleControllerTest {
 
   @Test
   public void shouldShowPagedSpittles() throws Exception {
+	/*
+	 * 【1】创建含有50个Spittle对象的集合  
+	 */
     List<Spittle> expectedSpittles = createSpittleList(50);
+    /*
+     * 【2】创建SpittleRepository对象的模拟器（与{houldShowRecentSpittles().【2】}一样）
+     */
     SpittleRepository mockRepository = mock(SpittleRepository.class);
-    when(mockRepository.findSpittles(238900, 50))
-        .thenReturn(expectedSpittles);
-    
+    /*
+     * 【3】寓意：当mockRepository调用分页查询器时，返回50个对象
+     */
+    when(mockRepository.findSpittles(238900, 50))//分页查询器被调用
+        .thenReturn(expectedSpittles);//50个对象
+    /*
+     * 【4】实例化SpittleController
+     */
     SpittleController controller = new SpittleController(mockRepository);
+    /*
+     * 【5】按{【4】}创建控制器的模拟器，该模拟器用于单元测试
+     */
     MockMvc mockMvc = standaloneSetup(controller)
         .setSingleView(new InternalResourceView("/WEB-INF/views/spittles.jsp"))
         .build();
-
+    /*
+     * 【6】发送GET请求呈现 spittles.jsp 页面，页面包含属性 spittleList ，属性spittleList可遍历。
+     */
     mockMvc.perform(get("/spittles?max=238900&count=50"))
       .andExpect(view().name("spittles"))
       .andExpect(model().attributeExists("spittleList"))
@@ -94,13 +110,29 @@ public class SpittleControllerTest {
   
   @Test
   public void testSpittle() throws Exception {
+	/*
+	 * 【1】 创建一个含有 消息 和 时间 的 Spittle对象
+	 */
     Spittle expectedSpittle = new Spittle("Hello", new Date());
+    /*
+     * 【2】创建SpittleRepository对象的模拟器（与{houldShowRecentSpittles().【2】}一样）
+     */
     SpittleRepository mockRepository = mock(SpittleRepository.class);
+    /*
+     * 【3】调用findOne(int)方法后返回一个Spittle对象
+     */
     when(mockRepository.findOne(12345)).thenReturn(expectedSpittle);
-    
+    /*
+     * 【4】创建SpittleController控制器
+     */
     SpittleController controller = new SpittleController(mockRepository);
+    /*
+     * 【5】传入{【4】}的参数并创建控制器的模拟器，该模拟器用于单元测试
+     */
     MockMvc mockMvc = standaloneSetup(controller).build();
-
+    /*
+     * 【6】发送请求GET，呈现视图spittle.jsp，视图存有spittle属性，该属性与expectedSpittle等同。
+     */
     mockMvc.perform(get("/spittles/12345"))
       .andExpect(view().name("spittle"))
       .andExpect(model().attributeExists("spittle"))

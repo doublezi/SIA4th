@@ -13,27 +13,45 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import spittr.Spittle;
 import spittr.data.SpittleRepository;
-
+/**
+ * 
+ * </br>
+ * *********************
+ * </br>
+ * ä½œè€…ï¼šéš”å£è€ç‹(à²¥ _ à²¥) 21å²
+ * </br>          
+ * *********************
+ * </br>
+ * æ—¥æœŸï¼š2017å¹´12æœˆ14æ—¥
+ * </br>                
+ * *********************
+ * </br>
+ * æ—¶é—´ï¼šä¸Šåˆ11:25:02        
+ * </br>        
+ * *********************
+ * </br>
+ */
 @Controller
 @RequestMapping("/spittles")
 public class SpittleController {
-  /*
-   * ¡¾1¡¿ ÉùÃ÷¾²Ì¬×Ö·û´®³£Á¿ MAX_LONG_AS_STRING
-   */
+
   private static final String MAX_LONG_AS_STRING = "9223372036854775807";
-  /*
-   * ¡¾2¡¿ ÉùÃ÷DAO²ã£¨data£©ÊôĞÔ sr
-   */
+
   private SpittleRepository spittleRepository;
-  /*
-   * ¡¾3¡¿ ÉùÃ÷scµÄ¹¹ÔìÆ÷£¨±ØĞëÍ¨¹ı×¢Èësr¶ÔÏó²ÅÄÜ³õÊ¼»¯sc£©
-   */
+
   @Autowired
   public SpittleController(SpittleRepository spittleRepository) {
     this.spittleRepository = spittleRepository;
   }
-  /*
-   * ¡¾4¡¿  ÒòÎª@RequestParam,ËùÒÔmax , count ÊÇ²éÑ¯×Ö·û´® 
+  /**
+   * 
+   * @param max
+   * @param count
+   * @return  {@code List<Spittle>} æ§åˆ¶å™¨è¿”å›é›†åˆæˆ–POJOå¯¹è±¡æ—¶ï¼Œä¼šé»˜è®¤å¡«å……åˆ°{@code Model}æ¨¡å‹ä¸­ã€‚å¦‚æ­¤ä¸€æ¥ï¼Œé¡µé¢å°±èƒ½ä»æ¨¡å‹ä¸­å–å‡ºå€¼å¹¶å‘ˆç°ã€‚
+   * è¿™é‡Œä¸å†™{@code return "viewName"}ä¹Ÿè¡Œï¼Œå¦‚æœæ²¡æœ‰è®¾ç½®{@code return "viewName"}ï¼ŒSpring MVCä¼šæ ¹æ®è¯·æ±‚è·¯å¾„{@code Request URL}
+   * æ¥åˆ¤æ–­è¿”å›çš„è§†å›¾ã€‚ä»¥æ­¤ä¸ºä¾‹ï¼Œè¯·æ±‚ï¼ˆ{@link http://localhost:8080/spittr/spittles}ï¼‰åæ‰§è¡Œè¯¥æ–¹æ³•ï¼ŒSpringæ ¹æ®'/spittles'æ¨å‡ºå‘ˆç°çš„è§†å›¾æ˜¯{@code spittles.jsp}
+   * 
+   * 
    */
   @RequestMapping(method=RequestMethod.GET)
   public List<Spittle> spittles(
@@ -41,14 +59,17 @@ public class SpittleController {
       @RequestParam(value="count", defaultValue="20") int count) {
     return spittleRepository.findSpittles(max, count); 
   }
-  /*
-   * ¡¾5¡¿Model¼«Îª³£ÓÃ£¬¸Ã¶ÔÏóÍù·µÓÚÊÓÍ¼
+  /**
+   * 
+   * @param spittleId 
+   * @param model 
+   * @return
    */
   @RequestMapping(value="/{spittleId}", method=RequestMethod.GET)
   public String spittle(
       @PathVariable("spittleId") long spittleId, 
       Model model) {
-    model.addAttribute(spittleRepository.findOne(spittleId));//ÒşÊ½ÉùÃ÷Key
+    model.addAttribute(spittleRepository.findOne(spittleId));
     return "spittle";
   }
 
